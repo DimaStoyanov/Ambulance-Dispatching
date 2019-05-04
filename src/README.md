@@ -15,8 +15,8 @@ Global Quality
 Global time
 ![Global time](images/Patient%20Inflow.png)
 
-#### Discrete-event simulation
-Patients served
+#### Discrete-event simulation  
+Patients served  
 ![Patients served](images/Served%20patients.png)
 
 Patients time record
