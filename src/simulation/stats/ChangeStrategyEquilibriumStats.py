@@ -4,7 +4,7 @@ from simulation.stats.SimulationStats import SimulationStats
 
 
 class ChangeStrategyEquilibriumStats:
-    def __init__(self, la, mu, iterations=2, start_strategies='AAA', timesteps=2000, r=50, servers=[3, 3, 3],
+    def __init__(self, la, mu, iterations=2, start_strategies='AAA', timesteps=2000, r=50, servers=[2, 3, 4],
                  queue_buffer=5):
         self.la = la
         self.mu = mu

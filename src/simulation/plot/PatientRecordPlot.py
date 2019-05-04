@@ -41,4 +41,5 @@ if __name__ == '__main__':
     _, axs = plt.subplots(ncols=2, figsize=(25, 5))
     record_for_each_patient_global(axs[0], 'AAA', mu, ylim=ylim, queue_buffer=queue_buffer, l=l)
     record_for_each_patient_global(axs[1], 'RRR', mu, ylim=ylim, queue_buffer=queue_buffer, l=l)
+    plt.savefig('../../images/Patient time record')
     plt.show()

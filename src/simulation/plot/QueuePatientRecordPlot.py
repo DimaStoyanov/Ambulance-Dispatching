@@ -1,6 +1,7 @@
 from simulation.stats.SimulationStats import SimulationStats
 from src.common import *
 
+
 def record_for_each_patient(hosp_num, stats, ax, servers, strategy, ylim=None, xlim=None):
     data = {
         'Transporation time': [],
@@ -29,6 +30,7 @@ def record_for_each_patient(hosp_num, stats, ax, servers, strategy, ylim=None, x
     ax.set(xlim=xlim, ylabel="", ylim=ylim, xlabel="Patient id")
     sns.despine(left=True, bottom=True)
 
+
 if __name__ == '__main__':
     mu = 80
     queue_buffer = 5
@@ -42,4 +44,5 @@ if __name__ == '__main__':
     for i in range(3):
         record_for_each_patient(i, aaa_stats, axs[i][0], servers, 'AAA', ylim, xlim)
         record_for_each_patient(i, rrr_stats, axs[i][1], servers, 'RRR', ylim, xlim)
+    plt.savefig('../../images/Patient time record in each hospital')
     plt.show()

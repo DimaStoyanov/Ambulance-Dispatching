@@ -1,5 +1,7 @@
 from numpy.random import rand
 from numpy.random import uniform
+import random
+import math
 import numpy as np
 
 
@@ -17,11 +19,10 @@ class Point2D:
 
     @staticmethod
     def random_point_in_circle(r):
-        x = uniform(-r, r)
-        y2 = (r ** 2) - (x ** 2)
-        y = np.sqrt(y2)
-        if rand() > 0.5:
-            y = -y
+        alpha = 2 * math.pi * random.random()
+        rand_r = r * math.sqrt(random.random())
+        x = rand_r * math.cos(alpha)
+        y = rand_r * math.sin(alpha)
         return Point2D(x, y)
 
 

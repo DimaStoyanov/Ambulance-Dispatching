@@ -29,3 +29,5 @@ if __name__ == '__main__':
             rrr_queue = rrr_model.hospitals[i].servers_queue[j]
             queue_plot(rrr_queue, i, j, 'RRR', axs[ax_index][1], ylim, queue_buffer=queue_buffer)
             ax_index += 1
+    plt.savefig('../../images/Queue load')
+    plt.show()

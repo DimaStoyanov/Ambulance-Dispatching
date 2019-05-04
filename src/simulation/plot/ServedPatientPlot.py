@@ -28,9 +28,6 @@ def served_and_appeared_patients_plot(n, ax, mu=50, queue_buffer=5):
 
 if __name__ == '__main__':
     _, ax = plt.subplots()
-    salary = 100_000
     served_and_appeared_patients_plot([2, 3, 4], ax, mu=100)
+    plt.savefig('../../images/Served patients')
     plt.show()
-    # model = Hospitals2DModel(10, [2, 3, 4], 'RRR', mu=100)
-    # patient = model.hospitals[0].all_patients[5]
-    # print(patient.transp_time, patient.queue_time, patient.serve_time)

@@ -1,4 +1,4 @@
-from numpy.random import exponential
+from numpy.random import poisson
 from simulation.core.Event import Event
 from simulation.core.Patient import Patient
 from simulation.core.Point2D import *
@@ -21,8 +21,8 @@ class Stream:
 
     def generate(self):
         time = 0
-        interval_distr = exponential(self.l, 2000)
-        serve_distr = exponential(self.mu, 2001)
+        interval_distr = poisson(self.l, 2000)
+        serve_distr = poisson(self.mu, 2001)
         self.interval_mean = np.mean(interval_distr)
         self.events.append(self.create_appear_event(time, serve_distr[0]))
         for interval, serve_time in zip(interval_distr, serve_distr[1:]):
