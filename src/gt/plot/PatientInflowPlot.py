@@ -30,6 +30,7 @@ def global_plot(n, ax):
     sns.lineplot(x="Patients Inflow", y="Global time", hue="Strategy", data=data, ax=ax)
     ax.set_title('Server N = ' + str(n))
 
+
 if __name__ == '__main__':
     fig, axs = plt.subplots(ncols=3, figsize=(20, 5))
     global_plot([2, 1], axs[0])
@@ -37,4 +38,3 @@ if __name__ == '__main__':
     global_plot([2, 3], axs[2])
     plt.savefig('../../images/Patient Inflow')
     plt.show()
-
