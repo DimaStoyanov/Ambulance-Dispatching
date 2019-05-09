@@ -32,7 +32,7 @@ def record_for_each_patient(hosp_num, stats, ax, servers, strategy, ylim=None, x
 
 
 if __name__ == '__main__':
-    mu = 80
+    mu = 120
     queue_buffer = 5
     ylim = (0, 800)
     xlim = (0, 30)

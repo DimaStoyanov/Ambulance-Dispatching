@@ -35,8 +35,8 @@ def record_for_each_patient_global(ax, strategy, mu, l=25, ylim=None, queue_buff
 
 if __name__ == '__main__':
     l = 10
-    mu = 80
-    queue_buffer = 3
+    mu = 130
+    queue_buffer = 5
     ylim = (0, 500)
     _, axs = plt.subplots(ncols=2, figsize=(25, 5))
     record_for_each_patient_global(axs[0], 'AAA', mu, ylim=ylim, queue_buffer=queue_buffer, l=l)

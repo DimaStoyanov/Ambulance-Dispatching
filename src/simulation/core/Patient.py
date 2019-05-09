@@ -9,10 +9,12 @@ class Patient:
         self.serve_start_time = None
         self.serve_finish_time = None
         self.fetch_strategy = None
+        self.queue_state = None
+        self.hospital_num = None
 
     def __repr__(self):
-        return 'Patient reqT=%d arrT=%d ssT=%d sfT=%d' % (self.request_time, self.arrival_time,
-                                                          self.serve_start_time, self.serve_finish_time)
+        return 'Patient reqT=%d arrT=%d ssT=%d sfT=%d hosp=%d fetch=%s' % (self.request_time, self.arrival_time,
+                                                          self.serve_start_time, self.serve_finish_time, self.hospital_num, self.fetch_strategy)
 
     def set_transp_time(self, transp_time):
         self.transp_time = transp_time
@@ -22,3 +24,9 @@ class Patient:
         self.queue_time = queue_time
         self.serve_start_time = self.arrival_time + queue_time
         self.serve_finish_time = self.serve_start_time + self.serve_time
+
+    def set_queue_state(self, state):
+        self.queue_state = state
+
+    def set_hosp_num(self, hosp_num):
+        self.hospital_num = hosp_num

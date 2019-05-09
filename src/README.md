@@ -29,7 +29,9 @@ Select Hospital Algorithm
 ![Select Hospital Algorithm](images/Select%20Hospital%20Algorithm.png)
 
 Queue Load
-![Queue Load](images/Queue%20load.png)
+![Queue Load for Hospital 1](images/Queue%20load%20for%20Hospital%201.png)
+![Queue Load for Hospital 2](images/Queue%20load%20for%20Hospital%202.png)
+![Queue Load for Hospital 3](images/Queue%20load%20for%20Hospital%203.png)
 
 Nash Equilibrium for changing strategy (AAA)
 ![Nash Equilibrium for changing strategy (AAA)](images/Nash%20Equ%20from%20AAA.png)
