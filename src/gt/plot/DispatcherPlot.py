@@ -25,10 +25,10 @@ def find_nash(la, mu, n, print_matrix=False):
 
     game = Game(text)
     sol = game.findEquilibria('pne')
-    return extract_strategies_from_solutions(sol)
+    return extract_strategies_from_solutions(sol, matrix)
 
 
-def extract_strategies_from_solutions(solutions):
+def extract_strategies_from_solutions(solutions, payoff_matrix):
     strategies = set()
     if not solutions:
         return strategies
@@ -54,7 +54,22 @@ def extract_strategies_from_solutions(solutions):
         else:
             cur_stra += 'R'
         strategies.add(cur_stra)
+    if is_inconsistent(strategies, payoff_matrix):
+        return ['Inconsistent']
     return strategies
+
+
+def is_inconsistent(strategies, payoff):
+    for strategy in strategies:
+        if strategy == 'BE':
+            if payoff[2][0][0][1] < 0 or payoff[2][0][0][2] < 0:
+                return True
+            continue
+        cur = payoff[0] if strategy[:2] == 'N2' else payoff[1]
+        cur = cur[0] if strategy[3] == 'A' else cur[1]
+        cur = cur[0] if strategy[4] == 'A' else cur[1]
+        if cur[1] < 0 or cur[2] < 0:
+            return True
 
 
 def solution_plot(n, ax=None, legend=False):
@@ -79,7 +94,7 @@ def solution_plot(n, ax=None, legend=False):
 
 
 if __name__ == '__main__':
-    _, axs = plt.subplots(nrows=3, ncols=3,  figsize=(15, 15))
+    _, axs = plt.subplots(nrows=3, ncols=3, figsize=(15, 15))
     solution_plot([1, 1], ax=axs[0][0], legend='brief')
     solution_plot([1, 2], ax=axs[0][1], legend='brief')
     solution_plot([1, 3], ax=axs[0][2], legend='brief')

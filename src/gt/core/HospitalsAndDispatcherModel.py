@@ -113,7 +113,7 @@ class DispatcherAndHospitalsModel(HospitalsModel):
         return np.array(lambdas), np.array(times)
 
     @staticmethod
-    def global_average_time_function(l, t):
+    def global_average_time_function_scalar(l, t):
         return np.sum(l) / np.sum(l * t)
 
     @staticmethod
@@ -128,7 +128,7 @@ class DispatcherAndHospitalsModel(HospitalsModel):
             for j in range(2):
                 matrix[i].append([])
                 for k in range(2):
-                    dispatcher_payoff = self.global_average_time_function(lambdas[i][j][k], times[i][j][k])
+                    dispatcher_payoff = self.global_average_time_function_scalar(lambdas[i][j][k], times[i][j][k])
                     hospitals_payoff = self.utility_function(lambdas[i][j][k], times[i][j][k])
                     matrix[i][j].append([dispatcher_payoff, hospitals_payoff[0], hospitals_payoff[1]])
         return np.array(matrix)

@@ -18,36 +18,34 @@ def global_solution(l, mu, n):
 
 
 def global_solution_plot(n, ax=None):
+    print('Computing for n = {}'.format(n))
     data = {
         'Lambda': [],
         'Mu': [],
         'Optimal Strategy': []
     }
-    for l in np.linspace(0.5, 3, 100):
-        for mu in np.linspace(0.5, 3, 100):
+    for l in np.linspace(0.5, 3, 30):
+        for mu in np.linspace(0.5, 3, 30):
             data['Lambda'].append(l)
             data['Mu'].append(mu)
             data['Optimal Strategy'].append(global_solution(l, mu, n))
     data = pd.DataFrame(data)
-    sns.relplot(x='Lambda', y='Mu', hue='Optimal Strategy', data=data, ax=ax)
+    sns.scatterplot(x='Lambda', y='Mu', hue='Optimal Strategy', data=data, ax=ax, marker='s', s=1000)
     if ax is not None:
         ax.set_title('N = ' + str(n))
 
 
 if __name__ == '__main__':
     sns.set(style='ticks')
-    fig, axs = plt.subplots(ncols=3, nrows=3, figsize=(20, 15))
-    global_solution_plot([0, 1], axs[0][0])
-    global_solution_plot([0, 2], axs[0][1])
-    global_solution_plot([0, 3], axs[0][2])
-    global_solution_plot([1, 0], axs[1][0])
-    global_solution_plot([1, 1], axs[1][1])
-    global_solution_plot([1, 2], axs[1][2])
-    global_solution_plot([2, 0], axs[1][0])
-    global_solution_plot([2, 1], axs[2][1])
-    global_solution_plot([2, 2], axs[2][2])
-    [plt.close(i) for i in range(2, 11)]
-    global_solution_plot([0, 1])
+    fig, axs = plt.subplots(ncols=3, nrows=3, figsize=(15, 15))
+    global_solution_plot([1, 1], axs[0][0])
+    global_solution_plot([1, 2], axs[0][1])
+    global_solution_plot([1, 3], axs[0][2])
+    global_solution_plot([2, 1], axs[1][0])
+    global_solution_plot([2, 2], axs[1][1])
+    global_solution_plot([2, 3], axs[1][2])
+    global_solution_plot([3, 1], axs[2][0])
+    global_solution_plot([3, 2], axs[2][1])
+    global_solution_plot([3, 3], axs[2][2])
     fig.savefig('../../images/Global Nash Equ')
-    plt.savefig('../../images/Global Nash Equ(2)')
     plt.show()

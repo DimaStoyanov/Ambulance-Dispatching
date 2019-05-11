@@ -32,40 +32,38 @@ def find_solution(l, mu, n):
     G = hospital.game_matrix()
     A = extract_player_utility(G, 0)
     B = extract_player_utility(G, 1)
-    print(A)
-    print(B)
     game = nash.Game(A, B)
     eqs = skip_mixed_strategy(game.support_enumeration())
     if is_system_consistent(A, B, eqs):
         sol = extract_solution(eqs)
-        print(sol)
         return sol
     else:
         return 'Inconsistent'
 
 
-def solution_plot(n, ax=None, legend=False):
+def solution_plot(n, ax=None):
+    print('Computing for n = {}'.format(n))
     data = {
         'Lambda': [],
         'Mu': [],
         'Nash Equilibrium': []
     }
-    for mu in np.linspace(0.5, 3, 100):
-        for l in np.linspace(0.5, 3, 100):
+    for mu in np.linspace(0.5, 3, 30):
+        for l in np.linspace(0.5, 3, 30):
             data['Lambda'].append(l)
             data['Mu'].append(mu)
             data['Nash Equilibrium'].append(find_solution(l, mu, n))
     data = pd.DataFrame(data)
     if ax is not None:
-        sns.relplot(x='Lambda', y='Mu', hue='Nash Equilibrium', data=data, ax=ax, legend=legend)
+        sns.scatterplot(x='Lambda', y='Mu', hue='Nash Equilibrium', data=data, ax=ax, marker='s', s=1000)
         ax.set_title('N = ' + str(n))
     else:
-        sns.relplot(x='Lambda', y='Mu', hue='Nash Equilibrium', data=data, legend=legend)
+        sns.relplot(x='Lambda', y='Mu', hue='Nash Equilibrium', data=data, marker='s', s=1000)
 
 
 if __name__ == '__main__':
     sns.set(style='white')
-    fig, axs = plt.subplots(ncols=3, nrows=3, figsize=(30, 30))
+    fig, axs = plt.subplots(ncols=3, nrows=3, figsize=(15, 15))
     solution_plot([1, 1], axs[0][0])
     solution_plot([1, 2], axs[0][1])
     solution_plot([1, 3], axs[0][2])
@@ -75,8 +73,5 @@ if __name__ == '__main__':
     solution_plot([3, 1], axs[2][0])
     solution_plot([3, 2], axs[2][1])
     solution_plot([3, 3], axs[2][2])
-    [plt.close(i) for i in range(2, 11)]
-    solution_plot([1, 1], legend='brief')
     fig.savefig('../../images/Hospital Nash Equ')
-    plt.savefig('../../images/Hospital Nash Equ(2)')
     plt.show()
