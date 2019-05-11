@@ -1,7 +1,7 @@
 from src.common import *
 
 
-class HospitalModel:
+class HospitalsModel:
     def __init__(self, la, mu, n, N_lim, t_c):
         self.la = la
         self.mu = mu
@@ -31,6 +31,9 @@ class HospitalModel:
         p_0 = self.empty_queue(l, n)
         ro = self.load_param(l, self.mu)
         return (ro ** (n + 1) * n) / factor(n) / ((n - ro) ** 2) * p_0
+
+    def queue_time(self, la, n):
+        return 0 if la == 0 else self.queue_length(la, n) / la
 
     def queue_processing_time(self, l, n):
         W_q = self.queue_length(l, n)
@@ -106,7 +109,7 @@ class HospitalModel:
 
 
 if __name__ == '__main__':
-    model = HospitalModel(4, 2, [3, 4], 2, 10)
+    model = HospitalsModel(4, 2, [3, 4], 2, 10)
     print(model.lambdas('RR'))
     print(model.game_matrix())
     print(model.global_average_time_matrix())

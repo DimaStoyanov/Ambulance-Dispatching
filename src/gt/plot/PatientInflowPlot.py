@@ -1,4 +1,4 @@
-from gt.core.HospitalModel import *
+from gt.core.HospitalsModel import *
 
 
 def global_plot(n, ax):
@@ -9,7 +9,7 @@ def global_plot(n, ax):
     }
     l_space = np.linspace(0.1, 0.8, 100)
     for l in l_space:
-        hospital = HospitalModel(l, 1, n, N_lim, t_c)
+        hospital = HospitalsModel(l, 1, n, N_lim, t_c)
         G = hospital.global_average_time_matrix()
         data['Patients Inflow'].append(l)
         data['Global time'].append(G[0][0])

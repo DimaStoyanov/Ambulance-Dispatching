@@ -1,4 +1,4 @@
-from gt.core.HospitalModel import *
+from gt.core.HospitalsModel import *
 
 
 def extract_player_utility(matrix, i):
@@ -28,14 +28,18 @@ def is_system_consistent(A, B, eqs):
 
 
 def find_solution(l, mu, n):
-    hospital = HospitalModel(l, mu, n, N_lim, t_c)
+    hospital = HospitalsModel(l, mu, n, N_lim, t_c)
     G = hospital.game_matrix()
     A = extract_player_utility(G, 0)
     B = extract_player_utility(G, 1)
+    print(A)
+    print(B)
     game = nash.Game(A, B)
     eqs = skip_mixed_strategy(game.support_enumeration())
     if is_system_consistent(A, B, eqs):
-        return extract_solution(eqs)
+        sol = extract_solution(eqs)
+        print(sol)
+        return sol
     else:
         return 'Inconsistent'
 

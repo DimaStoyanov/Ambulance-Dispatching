@@ -1,8 +1,8 @@
-from gt.core.HospitalModel import *
+from gt.core.HospitalsModel import *
 
 
 def global_solution(l, mu, n):
-    hospital = HospitalModel(l, mu, n, N_lim, t_c)
+    hospital = HospitalsModel(l, mu, n, N_lim, t_c)
     G = hospital.global_average_time_matrix()
     solution = np.min(G)
     if solution < 0:
