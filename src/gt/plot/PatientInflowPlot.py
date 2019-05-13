@@ -36,5 +36,5 @@ if __name__ == '__main__':
     global_plot([2, 1], axs[0])
     global_plot([2, 2], axs[1])
     global_plot([2, 3], axs[2])
-    plt.savefig('../../images/Patient Inflow')
+    plt.savefig('../../images/previous//Patient Inflow')
     plt.show()

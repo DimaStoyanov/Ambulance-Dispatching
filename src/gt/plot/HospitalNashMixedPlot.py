@@ -5,20 +5,13 @@ def extract_player_utility(matrix, i):
     return np.array(matrix)[:, :, i]
 
 
-def skip_mixed_strategy(eqs):
-    return list(filter(lambda x: x[0][0] == 0 or x[0][0] == 1, eqs))
-
-
-def extract_solution(eqs):
-    solution = set()
+def mixed_solution_value(eqs):
     for eq in eqs:
-        cur = 'A' if eq[0][0] == 1 else 'R'
-        cur += 'A' if eq[1][0] == 1 else 'R'
-        solution.add(cur)
-    return ', '.join(solution)
+        if eq[0][0] != 1 and eq[0][1] != 1:
+            return -1 + eq[0][1] + eq[0][1]
 
 
-def is_system_consistent(eqs, A, B):
+def is_system_consistent(A, B, eqs):
     for eq in eqs:
         i = 0 if eq[0][0] == 1 else 1
         j = 0 if eq[1][0] == 1 else 1
@@ -32,17 +25,13 @@ def find_solution(l, mu, n):
     G = hospital.game_matrix()
     A = extract_player_utility(G, 0)
     B = extract_player_utility(G, 1)
-
-    # if np.isnan(np.min(G)):
-    #     return 'Inconsistent'
-
     game = nash.Game(A, B)
-    eqs = skip_mixed_strategy(game.support_enumeration())
-    if eqs and is_system_consistent(eqs, A, B):
-        sol = extract_solution(eqs)
+    eqs = list(game.support_enumeration())
+    if is_system_consistent(A, B, eqs):
+        sol = mixed_solution_value(eqs)
         return sol
     else:
-        return 'Inconsistent'
+        return None
 
 
 def solution_plot(n, ax=None):
@@ -52,22 +41,26 @@ def solution_plot(n, ax=None):
         'Mu': [],
         'Nash Equilibrium': []
     }
-    for mu in np.linspace(0.01, 3, 30):
-        for l in np.linspace(0.01, 3, 30):
+    x_ticks = [round(x, 2) for x in np.linspace(0.01, 3, 10)]
+    y_ticks = [round(x, 2) for x in np.linspace(0.01, 3, 10)]
+    for mu in y_ticks:
+        for l in x_ticks:
             data['Lambda'].append(l)
             data['Mu'].append(mu)
             data['Nash Equilibrium'].append(find_solution(l, mu, n))
-    data = pd.DataFrame(data)
-    if ax is not None:
-        sns.scatterplot(x='Lambda', y='Mu', hue='Nash Equilibrium', data=data, ax=ax, marker='s', s=1000)
-        ax.set_title('N = ' + str(n))
-    else:
-        sns.relplot(x='Lambda', y='Mu', hue='Nash Equilibrium', data=data, marker='s', s=1000)
+    data = pd.DataFrame(data).pivot('Lambda', 'Mu', 'Nash Equilibrium')
+    sns.heatmap(data, ax=ax, vmin=-1, vmax=1)
+    ax.set_title('N = ' + str(n))
+    cbar = ax.collections[0].colorbar
+    cbar.set_ticks([-1, 0, 1])
+    cbar.set_ticklabels(['AA', 'AR/RA', 'RR'])
+    # ax.set_yticks(y_ticks)
+    # ax.set_xticks(x_ticks)
 
 
 if __name__ == '__main__':
     sns.set(style='white')
-    fig, axs = plt.subplots(ncols=3, nrows=3, figsize=(15, 15))
+    fig, axs = plt.subplots(ncols=3, nrows=3, figsize=(17, 17))
     solution_plot([1, 1], axs[0][0])
     solution_plot([1, 2], axs[0][1])
     solution_plot([1, 3], axs[0][2])
@@ -77,5 +70,5 @@ if __name__ == '__main__':
     solution_plot([3, 1], axs[2][0])
     solution_plot([3, 2], axs[2][1])
     solution_plot([3, 3], axs[2][2])
-    fig.savefig('../../images/previous/Hospital Nash Equ')
+    fig.savefig('../../images/previous/Hospital Mixed Nash Equ')
     plt.show()

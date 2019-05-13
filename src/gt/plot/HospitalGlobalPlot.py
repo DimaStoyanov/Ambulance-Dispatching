@@ -5,7 +5,7 @@ def global_solution(l, mu, n):
     hospital = HospitalsModel(l, mu, n, N_lim, t_c)
     G = hospital.global_average_time_matrix()
     solution = np.min(G)
-    if solution < 0:
+    if solution >= 1e8:
         return 'Inconsistent'
     if G[0][0] == solution:
         return 'AA'
@@ -24,8 +24,8 @@ def global_solution_plot(n, ax=None):
         'Mu': [],
         'Optimal Strategy': []
     }
-    for l in np.linspace(0.5, 3, 30):
-        for mu in np.linspace(0.5, 3, 30):
+    for l in np.linspace(0.01, 3, 30):
+        for mu in np.linspace(0.01, 3, 30):
             data['Lambda'].append(l)
             data['Mu'].append(mu)
             data['Optimal Strategy'].append(global_solution(l, mu, n))
@@ -47,5 +47,5 @@ if __name__ == '__main__':
     global_solution_plot([3, 1], axs[2][0])
     global_solution_plot([3, 2], axs[2][1])
     global_solution_plot([3, 3], axs[2][2])
-    fig.savefig('../../images/Global Nash Equ')
+    fig.savefig('../../images/previous/Global Nash Equ')
     plt.show()

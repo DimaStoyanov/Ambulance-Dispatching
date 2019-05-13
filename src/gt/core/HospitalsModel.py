@@ -2,12 +2,13 @@ from src.common import *
 
 
 class HospitalsModel:
-    def __init__(self, la, mu, n, N_lim, t_c):
+    def __init__(self, la, mu, n, N_lim, t_c, inconsistent_system_threshold=30):
         self.la = la
         self.mu = mu
         self.n = n
         self.N_lim = N_lim
         self.t_c = t_c
+        self.inconsistent_system_threshold = inconsistent_system_threshold
 
     @staticmethod
     def load_param(la, mu):
@@ -20,12 +21,18 @@ class HospitalsModel:
             p += (ro ** j) / factor(j)
         p += (ro ** n) / factor(n - 1) / (n - ro)
         p **= -1
+        if p < 0 or p > 1:
+            raise InconsistentSystemException('Probability should be in range from 0 to 1, but actual {}'.format(p))
         return p
 
     def k_in_queue(self, l, k, n):
         p_0 = self.empty_queue(l, n)
         ro = self.load_param(l, self.mu)
-        return (ro ** k) / factor(k) * p_0
+        p = (ro ** k) / factor(k) * p_0
+
+        if p < 0 or p > 1:
+            raise InconsistentSystemException('Probability should be in range from 0 to 1, but actual {}'.format(p))
+        return p
 
     def queue_length(self, l, n):
         p_0 = self.empty_queue(l, n)
@@ -37,6 +44,8 @@ class HospitalsModel:
 
     def queue_processing_time(self, l, n):
         W_q = self.queue_length(l, n)
+        if W_q >= self.inconsistent_system_threshold:
+            raise InconsistentSystemException('Queue unlimited increases')
         return W_q / l + 1 / self.mu
 
     def p_rej(self, l, n):
@@ -57,14 +66,19 @@ class HospitalsModel:
     def lambdas(self, type):
         la = np.array([self.la / 2, self.la / 2])
 
-        if type == 'AA':
-            return la
-        elif type == 'RA':
-            return np.array([la[0] * (1 - self.p_rej(la[0], self.n[0])), la[1] + la[0] * self.p_rej(la[0], self.n[0])])
-        elif type == 'AR':
-            return np.array([la[0] + la[1] * self.p_rej(la[1], self.n[1]), la[1] * (1 - self.p_rej(la[1], self.n[1]))])
-        elif type == 'RR':
-            return sum(self.lambda_rr_sup(la))
+        try:
+            if type == 'AA':
+                return la
+            elif type == 'RA':
+                return np.array(
+                    [la[0] * (1 - self.p_rej(la[0], self.n[0])), la[1] + la[0] * self.p_rej(la[0], self.n[0])])
+            elif type == 'AR':
+                return np.array(
+                    [la[0] + la[1] * self.p_rej(la[1], self.n[1]), la[1] * (1 - self.p_rej(la[1], self.n[1]))])
+            elif type == 'RR':
+                return sum(self.lambda_rr_sup(la))
+        except InconsistentSystemException:
+            return np.array([-1e9, -1e9])
 
     def t_transp(self, lambdas, type, i=None):
         if type == 'AA' or (type == 'RA' and i == 0) or (type == 'AR' and i == 1):
@@ -77,11 +91,14 @@ class HospitalsModel:
             return self.t_c * (0.25 * l_i_1[i] + 0.75 * l_i_2[i] + 0.5 * l_i_3[i]) / lambdas[i]
 
     def total_time(self, lambdas, type):
-        t_1 = self.queue_processing_time(lambdas[0], self.n[0])
-        t_2 = self.queue_processing_time(lambdas[1], self.n[1])
-        t_transp_1 = self.t_transp(lambdas, type, 0)
-        t_transp_2 = self.t_transp(lambdas, type, 1)
-        return np.array([t_1 + t_transp_1, t_2 + t_transp_2])
+        try:
+            t_1 = self.queue_processing_time(lambdas[0], self.n[0])
+            t_2 = self.queue_processing_time(lambdas[1], self.n[1])
+            t_transp_1 = self.t_transp(lambdas, type, 0)
+            t_transp_2 = self.t_transp(lambdas, type, 1)
+            return np.array([t_1 + t_transp_1, t_2 + t_transp_2])
+        except InconsistentSystemException:
+            return np.array([1e9, 1e9])
 
     def lambdas_and_times(self):
         lambdas = np.array([[self.lambdas('AA'), self.lambdas('AR')], [self.lambdas('RA'), self.lambdas('RR')]])
@@ -106,6 +123,15 @@ class HospitalsModel:
     def global_average_time_matrix(self):
         lambdas, times = self.lambdas_and_times()
         return self.global_average_time_function(lambdas, times)
+
+    def is_system_consistent(self, strategy):
+        la = self.lambdas(strategy)
+        queue_len = [self.queue_length(la[i], self.n[i]) for i in range(2)]
+        return all(la_i > 0 for la_i in la) and all(l < self.inconsistent_system_threshold for l in queue_len)
+
+
+class InconsistentSystemException(Exception):
+    pass
 
 
 if __name__ == '__main__':

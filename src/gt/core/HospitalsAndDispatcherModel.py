@@ -1,5 +1,5 @@
 from common import *
-from gt.core.HospitalsModel import HospitalsModel
+from gt.core.HospitalsModel import HospitalsModel, InconsistentSystemException
 
 
 class DispatcherAndHospitalsModel(HospitalsModel):
@@ -103,13 +103,19 @@ class DispatcherAndHospitalsModel(HospitalsModel):
                 lambdas[-1].append([])
                 times[-1].append([])
                 for hosp_j_strategy in ['A', 'R']:
-                    la, t_trasnp = self.lambdas_and_transp_times(dispatcher_strategy, hosp_i_strategy + hosp_j_strategy)
-                    total_time = np.array([
-                        t_trasnp[0] + self.queue_processing_time(la[0], self.n[0]),
-                        t_trasnp[1] + self.queue_processing_time(la[1], self.n[1])
-                    ])
-                    lambdas[-1][-1].append(la)
-                    times[-1][-1].append(total_time)
+                    try:
+                        la, t_trasnp = self.lambdas_and_transp_times(dispatcher_strategy,
+                                                                     hosp_i_strategy + hosp_j_strategy)
+                        total_time = np.array([
+                            t_trasnp[0] + self.queue_processing_time(la[0], self.n[0]),
+                            t_trasnp[1] + self.queue_processing_time(la[1], self.n[1])
+                        ])
+                        lambdas[-1][-1].append(la)
+                        times[-1][-1].append(total_time)
+                    except InconsistentSystemException:
+                        lambdas[-1][-1].append(np.array([-1e9, -1e9]))
+                        times[-1][-1].append(np.array([1e9, 1e9]))
+
         return np.array(lambdas), np.array(times)
 
     @staticmethod

@@ -19,14 +19,13 @@ def find_nash(la, mu, n, print_matrix=False):
     for k in range(2):
         for j in range(2):
             for i in range(2):
-                text += "{ \"\" %f, %f, %f }\n" % (matrix[i][j][k][0], matrix[i][j][k][2], matrix[i][j][k][2])
+                text += "{ \"\" %f, %f, %f }\n" % (matrix[i][j][k][0], matrix[i][j][k][1], matrix[i][j][k][2])
     text += "}\n"
     text += "1 2 3 4 5 6 7 8"
 
     game = Game(text)
     sol = game.findEquilibria('pne')
     return extract_strategies_from_solutions(sol, matrix)
-
 
 
 def is_inconsistent(strategies, payoff):
@@ -36,6 +35,7 @@ def is_inconsistent(strategies, payoff):
         cur = cur[0] if strategy[4] == 'A' else cur[1]
         if cur[1] < 0 or cur[2] < 0:
             return True
+
 
 def extract_strategies_from_solutions(solutions, payoff_matrix):
     strategies = set()
@@ -71,9 +71,9 @@ def solution_plot(n, ax=None, legend=False):
         'Mu': [],
         'Nash Equilibrium': []
     }
-    for mu in np.linspace(0.5, 3, 30):
+    for mu in np.linspace(0.01, 3, 30):
         # print('Computing for mu={}'.format(mu))
-        for l in np.linspace(0.5, 3, 30):
+        for l in np.linspace(0.01, 3, 30):
             data['Lambda'].append(l)
             data['Mu'].append(mu)
             data['Nash Equilibrium'].append(','.join(find_nash(l, mu, n)))
@@ -86,7 +86,7 @@ def solution_plot(n, ax=None, legend=False):
 
 
 if __name__ == '__main__':
-    _, axs = plt.subplots(nrows=3, ncols=3,  figsize=(15, 15))
+    _, axs = plt.subplots(nrows=3, ncols=3, figsize=(15, 15))
     solution_plot([1, 1], ax=axs[0][0], legend='brief')
     solution_plot([1, 2], ax=axs[0][1], legend='brief')
     solution_plot([1, 3], ax=axs[0][2], legend='brief')
