@@ -1,5 +1,9 @@
-Nash Equilibrium for Hospital
+Pure Nash Equilibrium for Hospital
 ![Nash Equilibrium for Hospital](images/previous/Hospital%20Nash%20Equ.png)  
+
+Mixed Nash Equilibrium for Hospital
+![Nash Equilibrium for Hospital](images/previous/Hospital%20Mixed%20Nash%20Equ.png)  
+
 
 Global Quality
 ![Global quality](images/previous/Global%20Nash%20Equ.png)
