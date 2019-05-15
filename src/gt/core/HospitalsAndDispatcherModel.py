@@ -126,10 +126,10 @@ class DispatcherAndHospitalsModel(HospitalsModel):
     def utility_function(l, t):
         return l / t
 
-    def game_matrix(self):
+    def game_matrix(self, disp_strategies_number=3):
         lambdas, times = self.lambdas_and_times()
         matrix = []
-        for i in range(3):
+        for i in range(disp_strategies_number):
             matrix.append([])
             for j in range(2):
                 matrix[i].append([])

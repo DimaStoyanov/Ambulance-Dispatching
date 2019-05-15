@@ -1,5 +1,5 @@
 from gt.core.HospitalsAndDispatcherModel import DispatcherAndHospitalsModel
-from neng.game import Game
+from gt.core.NashEquilibrium import GameWith3Players
 from common import *
 
 
@@ -9,59 +9,16 @@ def find_nash(la, mu, n, print_matrix=False):
     if print_matrix:
         print(matrix)
 
-    text = "NFG 1 R \"Ambulance Dispatching Game\" { \"Dispatcher\" \"Hospital1\" \"Hospital2\" }\n\n"
-    text += "{ { \"N2\" \"N1\" \"BE\" }\n"
-    text += "{ \"A\" \"R\" }\n"
-    text += "{ \"A\" \"R\" }\n"
-    text += "}\n\"\"\n\n"
-
-    text += "{\n"
-    for k in range(2):
-        for j in range(2):
-            for i in range(3):
-                text += "{ \"\" %f, %f, %f }\n" % (matrix[i][j][k][0], matrix[i][j][k][2], matrix[i][j][k][2])
-    text += "}\n"
-    text += "1 2 3 4 5 6 7 8 9 10 11 12"
-
-    game = Game(text)
-    sol = game.findEquilibria('pne')
-    return extract_strategies_from_solutions(sol, matrix)
-
-
-def extract_strategies_from_solutions(solutions, payoff_matrix):
-    strategies = set()
-    if not solutions:
-        return strategies
-    for sol in solutions:
-        cur_stra = ''
-        if sol[0][0] == 1:
-            cur_stra += 'N2'
-        elif sol[0][1] == 1:
-            cur_stra += 'N1'
-        else:
-            cur_stra += 'BE'
-            strategies.add(cur_stra)
-            continue
-
-        cur_stra += ';'
-        if sol[1][0] == 1:
-            cur_stra += 'A'
-        else:
-            cur_stra += 'R'
-
-        if sol[2][0] == 1:
-            cur_stra += 'A'
-        else:
-            cur_stra += 'R'
-        strategies.add(cur_stra)
-    if is_inconsistent(strategies, payoff_matrix):
+    game = GameWith3Players(matrix)
+    equs = game.find_pne_for_dispatcher_and_hospitals()
+    if is_inconsistent(equs, matrix):
         return ['Inconsistent']
-    return strategies
+    return equs
 
 
 def is_inconsistent(strategies, payoff):
     for strategy in strategies:
-        if strategy == 'BE':
+        if strategy[:2] == 'BE':
             if payoff[2][0][0][1] < 0 or payoff[2][0][0][2] < 0:
                 return True
             continue

@@ -19,7 +19,7 @@ Patients time record
 ![Patients time record](images/previous/Patient%20time%20record.png)
 
 Patients time record in each hospital
-![Patients time record in each hospital](images/previous/Patient%20time%20record%20in%20each%20hospital.png)
+![Paltients time record in each hospital](images/previous/Patient%20time%20record%20in%20each%20hospital.png)
 
 Select Hospital Algorithm
 ![Select Hospital Algorithm](images/previous/Select%20Hospital%20Algorithm.png)

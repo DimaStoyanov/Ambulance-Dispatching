@@ -1,31 +1,19 @@
 from gt.core.HospitalsAndDispatcherModel import DispatcherAndHospitalsModel
-from neng.game import Game
 from common import *
+from gt.core.NashEquilibrium import GameWith3Players
 
 
 def find_nash(la, mu, n, print_matrix=False):
     model = DispatcherAndHospitalsModel(la, mu, n, 3, 10)
-    matrix = model.game_matrix()
+    matrix = model.game_matrix(disp_strategies_number=2)
     if print_matrix:
         print(matrix)
 
-    text = "NFG 1 R \"Ambulance Dispatching Game\" { \"Dispatcher\" \"Hospital1\" \"Hospital2\" }\n\n"
-    text += "{ { \"N2\" \"N1\" }\n"
-    text += "{ \"A\" \"R\" }\n"
-    text += "{ \"A\" \"R\" }\n"
-    text += "}\n\"\"\n\n"
-
-    text += "{\n"
-    for k in range(2):
-        for j in range(2):
-            for i in range(2):
-                text += "{ \"\" %f, %f, %f }\n" % (matrix[i][j][k][0], matrix[i][j][k][1], matrix[i][j][k][2])
-    text += "}\n"
-    text += "1 2 3 4 5 6 7 8"
-
-    game = Game(text)
-    sol = game.findEquilibria('pne')
-    return extract_strategies_from_solutions(sol, matrix)
+    game = GameWith3Players(matrix)
+    equs = game.find_pne_for_dispatcher_and_hospitals()
+    if is_inconsistent(equs, matrix):
+        return ['Inconsistent']
+    return equs
 
 
 def is_inconsistent(strategies, payoff):
@@ -37,31 +25,6 @@ def is_inconsistent(strategies, payoff):
             return True
 
 
-def extract_strategies_from_solutions(solutions, payoff_matrix):
-    strategies = set()
-    if not solutions:
-        return strategies
-    for sol in solutions:
-        cur_stra = ''
-        if sol[0][0] == 1:
-            cur_stra += 'N2'
-        else:
-            cur_stra += 'N1'
-        cur_stra += ';'
-        if sol[1][0] == 1:
-            cur_stra += 'A'
-        else:
-            cur_stra += 'R'
-
-        if sol[2][0] == 1:
-            cur_stra += 'A'
-        else:
-            cur_stra += 'R'
-        strategies.add(cur_stra)
-
-    if is_inconsistent(strategies, payoff_matrix):
-        return ['Inconsistent']
-    return strategies
 
 
 def solution_plot(n, ax=None, legend=False):
