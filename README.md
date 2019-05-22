@@ -11,4 +11,5 @@ to Ambulance Dispatching](Ambulance%20Dispatching.pdf)
 ### Implementation
 * [Jupyter notebook (previous results)](GT.ipynb)
 * [Dispatcher Player notebook](Dispatcher%20Agent.ipynb)
+* [Healthcare Regulation](Healthcare%20Regulation.ipynb)
 * [Sources](/src)

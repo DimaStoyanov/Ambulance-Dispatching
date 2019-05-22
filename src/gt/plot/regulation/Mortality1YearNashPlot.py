@@ -6,7 +6,7 @@ from common import *
 class M1YMixedNashPLot(NashMixedPlot):
 
     def find_solution(self, l, mu, n):
-        hospital = HospitalWith1YM(l, mu, n, N_lim, t_c, 10, 9)
+        hospital = HospitalWith1YM(l, mu, n, N_lim, t_c, cost_op, cost_op + cost_transp)
         G = hospital.game_matrix()
         A = self.extract_player_utility(G, 0)
         B = self.extract_player_utility(G, 1)
@@ -20,4 +20,4 @@ class M1YMixedNashPLot(NashMixedPlot):
 
 
 if __name__ == '__main__':
-    M1YMixedNashPLot().show('../../../images/regulation/Hospital with 1YM regulation Mixed Nash Equ')
+    M1YMixedNashPLot().show('../../../images/regulation/Hospital with 1YM regulation Mixed Nash Equ low revenue')

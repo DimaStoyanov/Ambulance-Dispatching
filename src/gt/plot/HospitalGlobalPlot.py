@@ -3,23 +3,28 @@ from gt.core.HospitalsModel import *
 
 class GlobalEquPlot:
 
+    def __init__(self):
+        self.op = np.min
+
     def global_matrix(self, la, mu, n):
         hospital = HospitalsModel(la, mu, n, N_lim, t_c)
         return hospital.global_average_time_matrix()
 
     def global_solution(self, la, mu, n):
         g = self.global_matrix(la, mu, n)
-        solution = np.min(g)
+        solution = self.op(g)
         if abs(solution) >= 1e8:
             return 'Inconsistent'
+        equs = []
         if g[0][0] == solution:
-            return 'AA'
+            equs.append('AA')
         elif g[0][1] == solution:
-            return 'AR'
+            equs.append('AR')
         elif g[1][0] == solution:
-            return 'RA'
+            equs.append('RA')
         else:
-            return 'RR'
+            equs.append('RR')
+        return ','.join(equs)
 
     def global_solution_plot(self, n, ax=None):
         print('Computing for n = {}'.format(n))

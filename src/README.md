@@ -7,6 +7,7 @@ Ambulance Dispatching GT && DES Implementation
 
 [Dispatcher Agent](../Dispatcher%20Agent.html)
 
+[Healthcare Regulation](../Healthcare%20Regulation.html)
 
 ### Requirements
 * Python 3.7+

@@ -11,7 +11,7 @@ class HospitalWithD2BModel(HospitalsModel):
 
     @staticmethod
     def p_mortality(t):
-        return (-1.09491090e-06 * t ** 3 + 4.77004477e-04 * t ** 2 - 2.14727429e-02 * t + 3.21208791) / 100
+        return (5.82010582e-05 * t ** 2 + 2.25508870e-02 * t + 2.13785714) / 100
 
     def lambda_cured(self, la, t):
         return la * (1 - self.p_mortality(t))
