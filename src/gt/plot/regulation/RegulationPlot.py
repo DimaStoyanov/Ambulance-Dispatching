@@ -39,7 +39,7 @@ class RegulationPlot(PureNashPlot):
 
     def d2b_nash_optima(self, n, revenue):
         matches = 0
-        points = 10
+        points = 20
         for la in np.linspace(0.05, 4, points):
             for mu in np.linspace(0.05, 4, points):
                 model = HospitalWithD2BModel(la, mu, n, N_lim, t_c, revenue, cost_transp, cost_op)
@@ -51,7 +51,7 @@ class RegulationPlot(PureNashPlot):
 
     def m1y_nash_optima(self, n, revenue):
         matches = 0
-        points = 10
+        points = 20
         for la in np.linspace(0.05, 4, points):
             for mu in np.linspace(0.05, 4, points):
                 model = HospitalWith1YM(la, mu, n, N_lim, t_c, revenue, cost_transp + cost_op)
@@ -63,7 +63,7 @@ class RegulationPlot(PureNashPlot):
 
     def base_model_nash_optima(self, n):
         matches = 0
-        points = 10
+        points = 20
         for la in np.linspace(0.05, 4, points):
             for mu in np.linspace(0.05, 4, points):
                 model = HospitalsModel(la, mu, n, N_lim, t_c)
@@ -80,7 +80,7 @@ class RegulationPlot(PureNashPlot):
             'Regulation': ['Transportation and surgery cost'] * 2 + ['Transportation cost'] * 2 + ['No regulation'] * 2,
             'Nash Equ proximity to global Equ': [0, 1] * 2 + [self.base_model_nash_optima(n)] * 2
         }
-        for revenue in np.linspace(1, 30, 10):
+        for revenue in np.linspace(1, 30, 50):
             data['Revenue'].append(revenue)
             data['Regulation'].append('Door-to-balloon time')
             data['Nash Equ proximity to global Equ'].append(self.d2b_nash_optima(n, revenue))
@@ -91,7 +91,8 @@ class RegulationPlot(PureNashPlot):
 
         data = pd.DataFrame(data)
         sns.lineplot(x='Revenue', y='Nash Equ proximity to global Equ', hue='Regulation', data=data, ax=ax)
-        plt.legend(loc='lower right')
+        ax.legend(loc='lower right')
+        [ax.lines[i].set_linestyle("--") for i in [3, 4]]
 
         if ax is not None:
             ax.set_title('N = {}'.format(n))
