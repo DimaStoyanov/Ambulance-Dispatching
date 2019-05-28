@@ -6,7 +6,7 @@ from gt.core.HospitalWithD2BModel import HospitalWithD2BModel
 class D2BPureNashPlot(PureNashPlot):
 
     def find_solution(self, l, mu, n):
-        hospital = HospitalWithD2BModel(l, mu, n, N_lim, t_c, 20, 3, 10)
+        hospital = HospitalWithD2BModel(l, mu, n, N_lim, t_c, 2, 3, 10)
         G = hospital.game_matrix()
         A = self.extract_player_utility(G, 0)
         B = self.extract_player_utility(G, 1)

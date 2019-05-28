@@ -11,13 +11,6 @@ class HospitalWithD2BModel(HospitalsModel):
 
     @staticmethod
     def p_mortality(t):
-        sh = t.shape
-        t = t.flatten()
-        # Shitty code for inconsistent case
-        for i, v in zip(range(len(t)), t):
-            if v > 1e8:
-                t[i] = -v
-        t = t.reshape(sh)
         return np.minimum(
             (2.83204328e-11 * t ** 5 - 2.11879941e-08 * t ** 4 + 4.61775189e-06 * t ** 3 - 1.91991297e-04 * t ** 2 +
              1.03594973e-02 * t + 2.78396809), [10.3] * len(t)) / 100
@@ -31,7 +24,7 @@ class HospitalWithD2BModel(HospitalsModel):
     def global_matrix(self):
         lambdas, times = self.lambdas_and_times()
         lambdas_cured = self.lambda_cured(lambdas, times)
-        return np.sum(lambdas_cured, axis=2) / np.sum(lambdas, axis=2)
+        return np.nan_to_num(np.sum(lambdas_cured, axis=2) / np.sum(lambdas, axis=2))
 
     def actual_total_time(self):
         lambdas, times = self.lambdas_and_times()

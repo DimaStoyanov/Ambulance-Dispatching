@@ -4,7 +4,7 @@ from common import *
 
 
 def find_nash(la, mu, n, print_matrix=False):
-    model = DispatcherAndHospitalsModel(la, mu, n, 3, 10)
+    model = DispatcherAndHospitalsModel(la, mu, n, N_lim, t_c)
     matrix = model.game_matrix()
     if print_matrix:
         print(matrix)
@@ -25,7 +25,7 @@ def is_inconsistent(strategies, payoff):
         cur = payoff[0] if strategy[:2] == 'N2' else payoff[1]
         cur = cur[0] if strategy[3] == 'A' else cur[1]
         cur = cur[0] if strategy[4] == 'A' else cur[1]
-        if cur[1] < 0 or cur[2] < 0:
+        if cur[1] == 0 or cur[2] == 0:
             return True
 
 
@@ -36,15 +36,16 @@ def solution_plot(n, ax=None, legend=False):
         'Mu': [],
         'Nash Equilibrium': []
     }
-    for mu in np.linspace(0.5, 3, 30):
+    for mu in np.linspace(mu_min, mu_max, 30):
         # print('Computing for mu={}'.format(mu))
-        for l in np.linspace(0.5, 3, 30):
+        for l in np.linspace(la_min, la_max, 30):
             data['Lambda'].append(l)
             data['Mu'].append(mu)
             data['Nash Equilibrium'].append(','.join(find_nash(l, mu, n)))
     data = pd.DataFrame(data)
     if ax is not None:
-        sns.scatterplot(x='Lambda', y='Mu', hue='Nash Equilibrium', data=data, ax=ax, legend=legend, marker='s', s=1000)
+        sns.scatterplot(x='Lambda', y='Mu', hue='Nash Equilibrium', data=data, ax=ax, legend=legend, marker='s', s=1000,
+                        palette=disp_palette)
         ax.set_title('N = ' + str(n))
     else:
         sns.scatterplot(x='Lambda', y='Mu', hue='Nash Equilibrium', data=data, legend=legend, marker='s', s=1000)

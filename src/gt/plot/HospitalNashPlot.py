@@ -25,7 +25,7 @@ class PureNashPlot:
         for eq in eqs:
             i = 0 if eq[0][0] == 1 else 1
             j = 0 if eq[1][0] == 1 else 1
-            if abs(A[i][j]) > 1e8 or abs(B[i][j]) > 1e8:
+            if abs(A[i][j]) == 0 or abs(B[i][j]) == 0:
                 return False
         return True
 
@@ -50,14 +50,14 @@ class PureNashPlot:
             'Mu': [],
             'Nash Equilibrium': []
         }
-        for mu in np.linspace(0.01, 3, 30):
-            for l in np.linspace(0.01, 3, 30):
+        for mu in np.linspace(mu_min, mu_max, 30):
+            for l in np.linspace(la_min, la_max, 30):
                 data['Lambda'].append(l)
                 data['Mu'].append(mu)
                 data['Nash Equilibrium'].append(self.find_solution(l, mu, n))
         data = pd.DataFrame(data)
         if ax is not None:
-            sns.scatterplot(x='Lambda', y='Mu', hue='Nash Equilibrium', data=data, ax=ax, marker='s', s=1000)
+            sns.scatterplot(x='Lambda', y='Mu', hue='Nash Equilibrium', data=data, ax=ax, marker='s', s=1000, palette=palette)
             ax.set_title('N = ' + str(n))
         else:
             sns.relplot(x='Lambda', y='Mu', hue='Nash Equilibrium', data=data, marker='s', s=1000)

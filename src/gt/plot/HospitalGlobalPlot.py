@@ -13,7 +13,7 @@ class GlobalEquPlot:
     def global_solution(self, la, mu, n):
         g = self.global_matrix(la, mu, n)
         solution = self.op(g)
-        if abs(solution) >= 1e8:
+        if solution == 0:
             return 'Inconsistent'
         equs = []
         if g[0][0] == solution:
@@ -33,13 +33,14 @@ class GlobalEquPlot:
             'Mu': [],
             'Optimal Strategy': []
         }
-        for l in np.linspace(0.01, 3, 30):
-            for mu in np.linspace(0.01, 3, 30):
+        for l in np.linspace(la_min, la_max, 30):
+            for mu in np.linspace(mu_min, mu_max, 30):
                 data['Lambda'].append(l)
                 data['Mu'].append(mu)
                 data['Optimal Strategy'].append(self.global_solution(l, mu, n))
         data = pd.DataFrame(data)
-        sns.scatterplot(x='Lambda', y='Mu', hue='Optimal Strategy', data=data, ax=ax, marker='s', s=1000)
+        sns.scatterplot(x='Lambda', y='Mu', hue='Optimal Strategy', data=data, ax=ax, marker='s', s=1000,
+                        palette=palette)
         if ax is not None:
             ax.set_title('N = ' + str(n))
 

@@ -1,6 +1,11 @@
 Ambulance Dispatching GT && DES Implementation
 ==
 
+### Assumptions
+
+Transportation time - `33 +- 15 minutes`  
+Surgery time - `30 +- 10 minutes`
+
 ### Results
 #### Game theory
 [Previous Results](Previous.md)

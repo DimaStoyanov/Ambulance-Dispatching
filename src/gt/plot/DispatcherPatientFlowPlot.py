@@ -1,14 +1,15 @@
 from gt.plot.Dispatcher2StrategiesPlot import *
 
+
 def global_plot(n, ax):
     data = {
         'Patients Inflow': [],
         'Global time': [],
         'Strategy': []
     }
-    l_space = np.linspace(0.1, 0.8, 100)
+    l_space = np.linspace(la_min, la_max, 100)
     for l in l_space:
-        hospital = DispatcherAndHospitalsModel(l, 1, n, N_lim, t_c)
+        hospital = DispatcherAndHospitalsModel(l, (mu_min + mu_max) / 2, n, N_lim, t_c)
         G = hospital.global_average_time_matrix()
         for disp_strategy, i in zip(['N2', 'N1'], range(2)):
             for hosp1_strategy, j in zip(['A', 'R'], range(2)):

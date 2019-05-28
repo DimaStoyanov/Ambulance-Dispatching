@@ -28,6 +28,14 @@ class RegulationPlot(PureNashPlot):
             equs.append('RR')
         return ','.join(equs)
 
+    def extract_rate_for_solutions(self, eqs, global_matrix):
+        rates = []
+        for eq in eqs:
+            i = 0 if eq[0][0] == 1 else 1
+            j = 0 if eq[1][0] == 1 else 1
+            rates.append(global_matrix[i][j])
+        return np.average(rates)
+
     def find_nash(self, g):
         A = self.extract_player_utility(g, 0)
         B = self.extract_player_utility(g, 1)
@@ -35,62 +43,69 @@ class RegulationPlot(PureNashPlot):
 
         eqs = self.skip_mixed_strategy(game.support_enumeration())
         if eqs and self.is_system_consistent(eqs, A, B):
-            return self.extract_solution(eqs)
+            return eqs
         else:
-            return 'Inconsistent'
+            return []
+
+    def find_rate(self, g, rates_matrix):
+        return self.extract_rate_for_solutions(self.find_nash(g), rates_matrix)
 
     def d2b_nash_optima(self, n, revenue):
-        matches = 0
+        rates = []
         for la in np.linspace(la_min, la_max, points):
             for mu in np.linspace(mu_min, mu_max, points):
                 model = HospitalWithD2BModel(la, mu, n, N_lim, t_c, revenue, cost_transp, cost_op)
-                nash_equs = self.find_nash(model.game_matrix())
-                global_equs = self.global_solution(model.global_matrix())
-                if self.strategies_intersects(global_equs, nash_equs):
-                    matches += 1
-        return matches / points / points
+                global_matrix = model.global_matrix()
+                rates.append(self.find_rate(model.game_matrix(), global_matrix))
+        return np.average(np.nan_to_num(rates))
 
     def m1y_nash_optima(self, n, revenue):
-        matches = 0
+        rates = []
         for la in np.linspace(la_min, la_max, points):
             for mu in np.linspace(mu_min, mu_max, points):
                 model = HospitalWith1YM(la, mu, n, N_lim, t_c, revenue, cost_transp + cost_op)
-                nash_equs = self.find_nash(model.game_matrix())
-                global_equs = self.global_solution(model.global_matrix())
-                if self.strategies_intersects(global_equs, nash_equs):
-                    matches += 1
-        return matches / points / points
+                rates.append(self.find_rate(model.game_matrix(), model.global_matrix()))
+        return np.average(np.nan_to_num(rates))
+
+    def find_base_rate(self, la, mu, n):
+        base_model = HospitalsModel(la, mu, n, N_lim, t_c)
+        equs = self.find_nash(base_model.game_matrix())
+        lambdas, times = base_model.lambdas_and_times()
+        rates = []
+        for eq in equs:
+            i = 0 if eq[0][0] == 1 else 1
+            j = 0 if eq[1][0] == 1 else 1
+            p_mort = HospitalWith1YM(la, mu, n, N_lim, t_c, revenue, cost_op + cost_transp).p_mortality(times[i][j])
+            rates.append((1 - p_mort))
+
+        return np.average(np.nan_to_num(rates))
 
     def base_model_nash_optima(self, n):
-        matches = 0
+        rates = []
         for la in np.linspace(la_min, la_max, points):
             for mu in np.linspace(mu_min, mu_max, points):
-                model = HospitalsModel(la, mu, n, N_lim, t_c)
-                nash_equs = self.find_nash(model.game_matrix())
-                global_equs = self.global_solution(model.global_average_time_matrix())
-                if self.strategies_intersects(global_equs, nash_equs):
-                    matches += 1
-        return matches / points / points
+                rates.append(self.find_base_rate(la, mu, n))
+        return np.average(np.nan_to_num(rates))
 
     def diff_between_optima_plot(self, n, ax=None):
         print('Computing for n = {}'.format(n))
         data = {
             'Revenue': [cost_op + cost_transp] * 2 + [cost_transp] * 2 + [-30, 30],
             'Regulation': ['Transportation and surgery cost'] * 2 + ['Transportation cost'] * 2 + ['No regulation'] * 2,
-            'Nash Equ proximity to global Equ': [0, 1] * 2 + [self.base_model_nash_optima(n)] * 2
+            'Cured rate': [0.6, 0.8] * 2 + [self.base_model_nash_optima(n)] * 2
         }
         for revenue in np.linspace(-30, 30, 20):
             data['Revenue'].append(revenue)
             data['Regulation'].append('Door-to-balloon time')
-            data['Nash Equ proximity to global Equ'].append(self.d2b_nash_optima(n, revenue))
+            data['Cured rate'].append(self.d2b_nash_optima(n, revenue))
 
             data['Revenue'].append(revenue)
             data['Regulation'].append('1 Year Mortality')
-            data['Nash Equ proximity to global Equ'].append(self.m1y_nash_optima(n, revenue))
+            data['Cured rate'].append(self.m1y_nash_optima(n, revenue))
 
         data = pd.DataFrame(data)
-        sns.lineplot(x='Revenue', y='Nash Equ proximity to global Equ', hue='Regulation', data=data, ax=ax)
-        ax.legend(loc='lower right')
+        sns.lineplot(x='Revenue', y='Cured rate', hue='Regulation', data=data, ax=ax)
+        ax.legend(loc='upper left')
         [ax.lines[i].set_linestyle("--") for i in [3, 4]]
 
         if ax is not None:
@@ -101,7 +116,7 @@ class RegulationPlot(PureNashPlot):
         for n1 in range(3):
             for n2 in range(3):
                 self.diff_between_optima_plot([n1 + 1, n2 + 1], axs[n1][n2])
-        plt.savefig('../../../images/regulation/Regulation comparision')
+        # plt.savefig('../../../images/regulation/Regulation comparision')
         plt.show()
 
 

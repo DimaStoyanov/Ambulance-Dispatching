@@ -12,7 +12,7 @@ class D2BGlobalPlot(GlobalEquPlot):
         return model.global_matrix()
 
     def append_if_consistent(self, data, la, strategy, val):
-        if abs(val) < 1e8:
+        if abs(val) != 0:
             data['Lambda'].append(la)
             data['Strategy'].append(strategy)
             data['Proportion of cured patients'].append(val)
@@ -24,9 +24,9 @@ class D2BGlobalPlot(GlobalEquPlot):
             'Strategy': [],
             'Proportion of cured patients': []
         }
-        mu = 2
-        for la in np.linspace(0.05, 5, 30):
-            global_matrix = HospitalWithD2BModel(la, mu, n, N_lim, 1, 13, 3, 10).global_matrix()
+        mu = (mu_min + mu_max) / 2
+        for la in np.linspace(la_min, la_max, 30):
+            global_matrix = HospitalWithD2BModel(la, mu, n, N_lim, t_c, 13, 3, 10).global_matrix()
 
             self.append_if_consistent(data, la, 'AA', global_matrix[0][0])
             self.append_if_consistent(data, la, 'AR', global_matrix[0][1])

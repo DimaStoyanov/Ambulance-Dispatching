@@ -7,7 +7,7 @@ def global_plot(n, ax):
         'Global time': [],
         'Strategy': []
     }
-    l_space = np.linspace(0.1, 0.8, 100)
+    l_space = np.linspace(la_min, la_max, 100)
     for l in l_space:
         hospital = HospitalsModel(l, 1, n, N_lim, t_c)
         G = hospital.global_average_time_matrix()

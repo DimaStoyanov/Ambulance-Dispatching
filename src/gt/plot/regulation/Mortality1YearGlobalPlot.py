@@ -8,11 +8,11 @@ class M1YGlobalPlot(GlobalEquPlot):
         self.op = np.max
 
     def global_matrix(self, la, mu, n):
-        model = HospitalWith1YM(la, mu, n, N_lim, 1, 13, 13)
+        model = HospitalWith1YM(la, mu, n, N_lim, t_c, 13, 13)
         return model.global_matrix()
 
     def append_if_consistent(self, data, la, strategy, val):
-        if abs(val) < 1e8:
+        if val != 0:
             data['Lambda'].append(la)
             data['Strategy'].append(strategy)
             data['Proportion of cured patients'].append(val)
@@ -24,8 +24,8 @@ class M1YGlobalPlot(GlobalEquPlot):
             'Strategy': [],
             'Proportion of cured patients': []
         }
-        mu = 2
-        for la in np.linspace(0.05, 5, 30):
+        mu = (la_min + la_max) / 2
+        for la in np.linspace(la_min, la_max, 30):
             global_matrix = HospitalWith1YM(la, mu, n, N_lim, t_c, 13, 13).global_matrix()
 
             self.append_if_consistent(data, la, 'AA', global_matrix[0][0])

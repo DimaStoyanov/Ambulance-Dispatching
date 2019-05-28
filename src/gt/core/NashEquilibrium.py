@@ -40,7 +40,7 @@ class GameWith3Players:
 
     def find_pne_for_dispatcher_and_hospitals(self):
         equs = self.find_pure_nash_equ()
-        return set([self.convert_strategy_idx_to_name(equ) for equ in equs])
+        return sorted(set([self.convert_strategy_idx_to_name(equ) for equ in equs]))
 
     def convert_strategy_idx_to_name(self, str_indices):
         disp_strategy = 'N2'

@@ -78,7 +78,7 @@ class HospitalsModel:
             elif type == 'RR':
                 return sum(self.lambda_rr_sup(la))
         except InconsistentSystemException:
-            return np.array([-1e9, -1e9])
+            return np.array([np.nan, np.nan])
 
     def t_transp(self, lambdas, type, i=None):
         if type == 'AA' or (type == 'RA' and i == 0) or (type == 'AR' and i == 1):
@@ -98,7 +98,7 @@ class HospitalsModel:
             t_transp_2 = self.t_transp(lambdas, type, 1)
             return np.array([t_1 + t_transp_1, t_2 + t_transp_2])
         except InconsistentSystemException:
-            return np.array([1e9, 1e9])
+            return np.array([np.nan, np.nan])
 
     def lambdas_and_times(self):
         lambdas = np.array([[self.lambdas('AA'), self.lambdas('AR')], [self.lambdas('RA'), self.lambdas('RR')]])
@@ -118,11 +118,11 @@ class HospitalsModel:
 
     def game_matrix(self):
         lambdas, times = self.lambdas_and_times()
-        return self.utility_function(lambdas, times)
+        return np.nan_to_num(self.utility_function(lambdas, times))
 
     def global_average_time_matrix(self):
         lambdas, times = self.lambdas_and_times()
-        return self.global_average_time_function(lambdas, times)
+        return np.nan_to_num(self.global_average_time_function(lambdas, times))
 
     def is_system_consistent(self, strategy):
         la = self.lambdas(strategy)
@@ -135,7 +135,7 @@ class InconsistentSystemException(Exception):
 
 
 if __name__ == '__main__':
-    model = HospitalsModel(4, 2, [3, 4], 2, 10)
+    model = HospitalsModel(1/30, 1/30, [1, 1], 2, 20)
     print(model.lambdas('RR'))
     print(model.game_matrix())
     print(model.global_average_time_matrix())

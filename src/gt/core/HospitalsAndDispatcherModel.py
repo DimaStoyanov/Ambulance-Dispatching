@@ -113,8 +113,8 @@ class DispatcherAndHospitalsModel(HospitalsModel):
                         lambdas[-1][-1].append(la)
                         times[-1][-1].append(total_time)
                     except InconsistentSystemException:
-                        lambdas[-1][-1].append(np.array([-1e9, -1e9]))
-                        times[-1][-1].append(np.array([1e9, 1e9]))
+                        lambdas[-1][-1].append(np.array([np.nan, np.nan]))
+                        times[-1][-1].append(np.array([np.nan, np.nan]))
 
         return np.array(lambdas), np.array(times)
 
@@ -137,9 +137,9 @@ class DispatcherAndHospitalsModel(HospitalsModel):
                     dispatcher_payoff = self.global_average_time_function_scalar(lambdas[i][j][k], times[i][j][k])
                     hospitals_payoff = self.utility_function(lambdas[i][j][k], times[i][j][k])
                     matrix[i][j].append([dispatcher_payoff, hospitals_payoff[0], hospitals_payoff[1]])
-        return np.array(matrix)
+        return np.nan_to_num(np.array(matrix))
 
 
 if __name__ == '__main__':
-    model = DispatcherAndHospitalsModel(2, 2, [2, 1], 3, 10)
+    model = DispatcherAndHospitalsModel(1/20, 1/20, [1, 1], N_lim, t_c)
     print(model.game_matrix())

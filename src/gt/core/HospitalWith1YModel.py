@@ -10,7 +10,7 @@ class HospitalWith1YM(HospitalsModel):
 
     @staticmethod
     def p_mortality(t):
-        return 0.00000043 * t ** 2 + 0.000045 * t + 0.00286
+        return (0.00043 * t ** 2 + 0.0045 * t + 2.86) / 100
 
     def utility_function(self, la, t):
         return la * ((1 - self.p_mortality(t)) * self.revenue_cured - self.med_expences)
@@ -18,7 +18,7 @@ class HospitalWith1YM(HospitalsModel):
     def global_matrix(self):
         lambdas, times = self.lambdas_and_times()
         lambdas_cured = lambdas * (1 - self.p_mortality(times))
-        return np.sum(lambdas_cured, axis=2) / np.sum(lambdas, axis=2)
+        return np.nan_to_num(np.sum(lambdas_cured, axis=2) / np.sum(lambdas, axis=2))
 
 
 if __name__ == '__main__':
