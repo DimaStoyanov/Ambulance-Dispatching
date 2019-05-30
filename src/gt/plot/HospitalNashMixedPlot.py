@@ -10,10 +10,10 @@ class NashMixedPlot:
     def mixed_or_pure_solution_value(eqs):
         for eq in eqs:
             if eq[0][0] != 1 and eq[0][1] != 1:
-                return int(round(255 * eq[1][1])), 0, int(round(eq[0][1] * 255))
+                return int(round(255 * eq[1][0])), 0, int(round(eq[0][0] * 255))
         if len(eqs) == 1:
             eq = eqs[0]
-            return int(round(eq[1][1] * 255)), 0, int(round(255 * eq[0][1]))
+            return int(round(eq[1][0] * 255)), 0, int(round(255 * eq[0][0]))
 
     @staticmethod
     def is_system_consistent(A, B, eqs):
@@ -70,10 +70,10 @@ class NashMixedPlot:
         ax.invert_yaxis()
         ax.set_title('Strategies Color Map', fontdict={'fontsize': 25})
         ax.set_xticks([0, 255])
-        ax.set_xticklabels(['A', 'R'])
+        ax.set_xticklabels(['R', 'A'])
         ax.set_xlabel('Hospital 1 Strategy', fontdict={'fontsize': 20})
         ax.set_yticks([0, 255])
-        ax.set_yticklabels(['R', 'A'])
+        ax.set_yticklabels(['A', 'R'])
         ax.set_ylabel('Hospital 2 Strategy', fontdict={'fontsize': 20})
 
     def show(self, filename='../../images/previous/Hospital Mixed Nash Equ'):

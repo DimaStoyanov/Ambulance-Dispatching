@@ -5,24 +5,24 @@ def global_solution(l, mu, n):
     hospital = DispatcherAndHospitalsModel(l, mu, n, N_lim, t_c)
     G = hospital.global_average_time_matrix()
     solution = np.min(G)
-    if solution >= 1e8:
+    if solution == 0:
         return 'Inconsistent'
     if G[0][0][0] == solution:
-        return 'N2;AA'
+        return 'N2-AA'
     elif G[0][0][1] == solution:
-        return 'N2;AR'
+        return 'N2-AR'
     elif G[0][1][0] == solution:
-        return 'N2;RA'
+        return 'N2-RA'
     elif G[0][1][1] == solution:
-        return 'N2;RR'
+        return 'N2-RR'
     elif G[1][0][0] == solution:
-        return 'N1;AA'
+        return 'N1-AA'
     elif G[1][0][1] == solution:
-        return 'N1;AR'
+        return 'N1-AR'
     elif G[1][1][0] == solution:
-        return 'N1;RA'
+        return 'N1-RA'
     else:
-        return 'N1;RR'
+        return 'N1-RR'
 
 
 def global_solution_plot(n, ax=None):
@@ -32,13 +32,13 @@ def global_solution_plot(n, ax=None):
         'Mu': [],
         'Optimal Strategy': []
     }
-    for l in np.linspace(0.01, 3, 30):
-        for mu in np.linspace(0.01, 3, 30):
+    for l in np.linspace(la_min, la_max, 30):
+        for mu in np.linspace(mu_min, mu_max, 30):
             data['Lambda'].append(l)
             data['Mu'].append(mu)
             data['Optimal Strategy'].append(global_solution(l, mu, n))
     data = pd.DataFrame(data)
-    sns.scatterplot(x='Lambda', y='Mu', hue='Optimal Strategy', data=data, ax=ax, marker='s', s=1000)
+    sns.scatterplot(x='Lambda', y='Mu', hue='Optimal Strategy', data=data, palette=disp2str_palette, ax=ax, marker='s', s=1000)
     if ax is not None:
         ax.set_title('N = ' + str(n))
 

@@ -55,6 +55,24 @@ disp_palette = {
     'BE,N1-AR,N2-RR': 'C7'
 }
 
+disp2str_palette = {
+    'Inconsistent': 'tab:grey',
+    'N1-RR': 'C0',
+    'N1-AA,N1-RR,N2-AA': 'C1',
+    'N1-AA,N2-AA': 'C2',
+    'N1-RR,N2-RA': 'C3',
+    'N1-RA,N2-RA': 'C4',
+    'N1-AR,N2-AR': 'C5',
+    'N1-RR,N2-AR': 'C6',
+    'N2-RR': 'C7',
+    'N1-RA,N2-RR': 'C8',
+    'N1-AR,N2-RR': 'g',
+    'N2-RA': 'b',
+    'N1-RA': 'tab:pink',
+    'N2-AR': 'tab:cyan',
+    'N2-AA': 'tab:olive'
+}
+
 revenue = 20
 
 heat_map_palette = []

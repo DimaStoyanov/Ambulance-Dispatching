@@ -19,7 +19,7 @@ def find_nash(la, mu, n, print_matrix=False):
 def is_inconsistent(strategies, payoff):
     for strategy in strategies:
         if strategy[:2] == 'BE':
-            if payoff[2][0][0][1] < 0 or payoff[2][0][0][2] < 0:
+            if payoff[2][0][0][1] == 0 or payoff[2][0][0][2] == 0:
                 return True
             continue
         cur = payoff[0] if strategy[:2] == 'N2' else payoff[1]
