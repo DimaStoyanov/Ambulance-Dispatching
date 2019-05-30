@@ -89,12 +89,13 @@ class RegulationPlot(PureNashPlot):
 
     def diff_between_optima_plot(self, n, ax=None):
         print('Computing for n = {}'.format(n))
+        base_rate = self.base_model_nash_optima(n)
         data = {
             'Revenue': [cost_op + cost_transp] * 2 + [cost_transp] * 2 + [-30, 30],
             'Regulation': ['Transportation and surgery cost'] * 2 + ['Transportation cost'] * 2 + ['No regulation'] * 2,
-            'Cured rate': [0.6, 0.8] * 2 + [self.base_model_nash_optima(n)] * 2
+            'Cured rate': [base_rate - 0.05, base_rate + 0.05] * 2 + [base_rate] * 2
         }
-        for revenue in np.linspace(-30, 30, 20):
+        for revenue in np.linspace(-30, 150, 20):
             data['Revenue'].append(revenue)
             data['Regulation'].append('Door-to-balloon time')
             data['Cured rate'].append(self.d2b_nash_optima(n, revenue))
@@ -116,7 +117,7 @@ class RegulationPlot(PureNashPlot):
         for n1 in range(3):
             for n2 in range(3):
                 self.diff_between_optima_plot([n1 + 1, n2 + 1], axs[n1][n2])
-        # plt.savefig('../../../images/regulation/Regulation comparision')
+        plt.savefig('../../../images/regulation/Regulation comparision by cure rate')
         plt.show()
 
 

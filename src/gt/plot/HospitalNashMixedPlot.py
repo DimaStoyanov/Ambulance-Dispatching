@@ -40,7 +40,7 @@ class NashMixedPlot:
     def solution_plot(self, n, ax=None):
         print('Computing for n = {}'.format(n))
         data = []
-        points = 10
+        points = 20
         x_ticks = [round(x, 2) for x in np.linspace(la_min, la_max, points)]
         y_ticks = [round(x, 2) for x in np.linspace(la_min, la_max, points)]
         for l in x_ticks:
@@ -49,12 +49,12 @@ class NashMixedPlot:
                 data[-1].append(self.find_solution(l, mu, n))
         plt.sca(ax)
         plt.imshow(data, extent=[la_min, la_max, mu_min, mu_max])
-        ax.set_title('Nash Mixed Equ N = ' + str(n))
+        ax.set_title('Nash Mixed Equ N = ' + str(n), fontdict={'fontsize': 22})
         ax.invert_yaxis()
         ax.set_xticks(np.linspace(la_min, la_max, 10))
         ax.set_xticklabels(x_ticks)
-        ax.set_xlabel('Lambda')
-        ax.set_ylabel('Mu')
+        ax.set_xlabel('Lambda', fontdict={'fontsize': 20})
+        ax.set_ylabel('Mu', fontdict={'fontsize': 20})
         ax.set_yticks(np.linspace(mu_max, mu_min, 10))
         ax.set_yticklabels(x_ticks)
 
@@ -68,16 +68,16 @@ class NashMixedPlot:
         plt.imshow(data, extent=[0, 255, 0, 255])
         ax = plt.gca()
         ax.invert_yaxis()
-        ax.set_title('Strategies Color Map')
+        ax.set_title('Strategies Color Map', fontdict={'fontsize': 25})
         ax.set_xticks([0, 255])
         ax.set_xticklabels(['A', 'R'])
-        ax.set_xlabel('Hospital 1 Strategy')
+        ax.set_xlabel('Hospital 1 Strategy', fontdict={'fontsize': 20})
         ax.set_yticks([0, 255])
         ax.set_yticklabels(['R', 'A'])
-        ax.set_ylabel('Hospital 2 Strategy')
+        ax.set_ylabel('Hospital 2 Strategy', fontdict={'fontsize': 20})
 
     def show(self, filename='../../images/previous/Hospital Mixed Nash Equ'):
-        fig = plt.figure(constrained_layout=True, figsize=(25, 25))
+        fig = plt.figure(constrained_layout=True, figsize=(23, 23))
         gs = fig.add_gridspec(3, 4)
         self.color_bar_2d(fig.add_subplot(gs[:, 3]))
         self.solution_plot([1, 1], ax=fig.add_subplot(gs[0, 0]))

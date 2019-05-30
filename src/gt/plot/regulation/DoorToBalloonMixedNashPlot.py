@@ -6,7 +6,7 @@ from common import *
 class D2BNashMixedPlot(NashMixedPlot):
 
     def find_solution(self, l, mu, n):
-        hospital = HospitalWithD2BModel(l, mu, n, N_lim, t_c, 5, cost_transp, cost_op)
+        hospital = HospitalWithD2BModel(l, mu, n, N_lim, t_c, revenue, cost_transp, cost_op)
         G = hospital.game_matrix()
         A = self.extract_player_utility(G, 0)
         B = self.extract_player_utility(G, 1)
@@ -16,7 +16,7 @@ class D2BNashMixedPlot(NashMixedPlot):
             sol = self.mixed_or_pure_solution_value(eqs)
             return sol
         else:
-            return None
+            return 255, 255, 255
 
 
 if __name__ == '__main__':

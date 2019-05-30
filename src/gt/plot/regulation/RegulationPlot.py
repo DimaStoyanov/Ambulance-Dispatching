@@ -75,11 +75,11 @@ class RegulationPlot(PureNashPlot):
     def diff_between_optima_plot(self, n, ax=None):
         print('Computing for n = {}'.format(n))
         data = {
-            'Revenue': [cost_op + cost_transp] * 2 + [cost_transp] * 2 + [-30, 30],
+            'Revenue': [cost_op + cost_transp] * 2 + [cost_transp] * 2 + [-150, 150],
             'Regulation': ['Transportation and surgery cost'] * 2 + ['Transportation cost'] * 2 + ['No regulation'] * 2,
             'Nash Equ proximity to global Equ': [0, 1] * 2 + [self.base_model_nash_optima(n)] * 2
         }
-        for revenue in np.linspace(-30, 30, 20):
+        for revenue in np.linspace(-150, 150, 20):
             data['Revenue'].append(revenue)
             data['Regulation'].append('Door-to-balloon time')
             data['Nash Equ proximity to global Equ'].append(self.d2b_nash_optima(n, revenue))

@@ -30,7 +30,7 @@ def is_system_consistent(eqs, A, B):
     for eq in eqs:
         i = 0 if eq[0][0] == 1 else 1
         j = 0 if eq[1][0] == 1 else 1
-        if abs(A[i][j]) > 1e8 or abs(B[i][j]) > 1e8:
+        if abs(A[i][j]) == 0 or abs(B[i][j]) ==  0:
             return False
     return True
 
