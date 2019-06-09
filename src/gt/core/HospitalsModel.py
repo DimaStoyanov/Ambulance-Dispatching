@@ -120,9 +120,10 @@ class HospitalsModel:
         lambdas, times = self.lambdas_and_times()
         return np.nan_to_num(self.utility_function(lambdas, times))
 
-    def global_average_time_matrix(self):
+    def global_average_time_matrix(self, nan_to_num=True):
         lambdas, times = self.lambdas_and_times()
-        return np.nan_to_num(self.global_average_time_function(lambdas, times))
+        res = self.global_average_time_function(lambdas, times)
+        return np.nan_to_num(res) if nan_to_num else res
 
     def is_system_consistent(self, strategy):
         la = self.lambdas(strategy)

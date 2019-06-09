@@ -7,10 +7,10 @@ def global_plot(n, ax):
         'Global time': [],
         'Strategy': []
     }
-    l_space = np.linspace(la_min, la_max, 100)
+    l_space = np.linspace(la_min, la_max, 200)
     for l in l_space:
         hospital = DispatcherAndHospitalsModel(l, (mu_min + mu_max) / 2, n, N_lim, t_c)
-        G = hospital.global_average_time_matrix()
+        G = hospital.global_average_time_matrix(nan_to_num=False)
         for disp_strategy, i in zip(['N2', 'N1'], range(2)):
             for hosp1_strategy, j in zip(['A', 'R'], range(2)):
                 for hosp2_strategy, k in zip(['A', 'R'], range(2)):

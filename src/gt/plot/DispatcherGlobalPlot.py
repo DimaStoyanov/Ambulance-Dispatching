@@ -3,7 +3,7 @@ from gt.core.HospitalsAndDispatcherModel import *
 
 def global_solution(l, mu, n):
     hospital = DispatcherAndHospitalsModel(l, mu, n, N_lim, t_c)
-    G = hospital.global_average_time_matrix()
+    G = hospital.global_average_time_matrix()[:2,:,:]
     solution = np.min(G)
     if solution == 0:
         return 'Inconsistent'
@@ -21,7 +21,7 @@ def global_solution(l, mu, n):
         return 'N1-AR'
     elif G[1][1][0] == solution:
         return 'N1-RA'
-    else:
+    elif G[1][1][1]:
         return 'N1-RR'
 
 
