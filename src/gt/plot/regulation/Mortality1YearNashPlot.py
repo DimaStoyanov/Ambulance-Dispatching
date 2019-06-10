@@ -5,7 +5,7 @@ from common import *
 
 class M1YNashPlot(PureNashPlot):
     def find_solution(self, l, mu, n):
-        hospital = HospitalWith1YM(l, mu, n, N_lim, t_c, 20, cost_transp + cost_op)
+        hospital = HospitalWith1YM(l, mu, n, N_lim, t_c, 2, cost_transp + cost_op)
         G = hospital.game_matrix()
         A = self.extract_player_utility(G, 0)
         B = self.extract_player_utility(G, 1)

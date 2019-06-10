@@ -52,7 +52,7 @@ def find_nash(full_matrix, disp_strategy_idx):
 def find_global(full_matrix, disp_strategy_idx):
     g = full_matrix[disp_strategy_idx]
     solution = np.min(g)
-    if abs(solution) >= 1e8:
+    if solution == 0:
         return 'Inconsistent'
     equs = []
     if g[0][0] == solution:

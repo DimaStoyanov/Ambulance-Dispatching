@@ -7,8 +7,8 @@ class RegulationPlot(RegulationPlot):
         matches = 0
         points = 20
         total_points = 0
-        for la in np.linspace(0.05, 4, points):
-            for mu in np.linspace(0.05, 4, points):
+        for la in np.linspace(la_min, la_max, points):
+            for mu in np.linspace(mu_min, mu_max, points):
                 if la >= mu:
                     total_points += 1
                     model = HospitalWithD2BModel(la, mu, n, N_lim, t_c, revenue, cost_transp, cost_op)

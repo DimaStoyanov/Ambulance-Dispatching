@@ -91,7 +91,7 @@ class RegulationPlot(PureNashPlot):
         print('Computing for n = {}'.format(n))
         base_rate = self.base_model_nash_optima(n)
         data = {
-            'Revenue': [cost_op + cost_transp] * 2 + [cost_transp] * 2 + [-30, 30],
+            'Revenue': [cost_op + cost_transp] * 2 + [cost_transp] * 2 + [-30, 150],
             'Regulation': ['Transportation and surgery cost'] * 2 + ['Transportation cost'] * 2 + ['No regulation'] * 2,
             'Cured rate': [base_rate - 0.05, base_rate + 0.05] * 2 + [base_rate] * 2
         }

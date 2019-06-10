@@ -41,9 +41,9 @@ class D2BGlobalPlot(GlobalEquPlot):
             ax.set_title('N = ' + str(n))
 
     def line_plot_cascade(self):
-        fig, axs = plt.subplots(nrows=5, ncols=5, figsize=(30, 30))
-        for n1 in range(5):
-            for n2 in range(5):
+        fig, axs = plt.subplots(nrows=3, ncols=3, figsize=(20, 20))
+        for n1 in range(3):
+            for n2 in range(3):
                 self.line_plot([n1 + 1, n2 + 1], axs[n1][n2])
         plt.savefig('../../../images/regulation/Hospital with D2B regulation cured rate')
         plt.show()

@@ -40,9 +40,9 @@ class M1YGlobalPlot(GlobalEquPlot):
         # [ax.lines[i].set_linestyle("--") for i in [0, 2]]
 
     def line_plot_cascade(self):
-        fig, axs = plt.subplots(nrows=5, ncols=5, figsize=(35, 35))
-        for n1 in range(5):
-            for n2 in range(5):
+        fig, axs = plt.subplots(nrows=3, ncols=3, figsize=(20, 20))
+        for n1 in range(3):
+            for n2 in range(3):
                 self.line_plot([n1 + 1, n2 + 1], axs[n1][n2])
         plt.savefig('../../../images/regulation/Hospital with M1Y regulation cured rate')
         plt.show()
