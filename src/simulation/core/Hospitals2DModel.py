@@ -36,15 +36,16 @@ class Hospitals2DModel:
             if hosp.can_accept_patient(patient.arrival_time):
                 patient.set_hosp_num(hosp.hosp_num)
                 queue = hosp.add_patient(patient)
-                # print(patient)
-                self.events.add(Event('served', patient, patient.serve_finish_time, queue, hosp))
+                if queue.load[-1] <= queue.servers:
+                    self.events.add(Event('start_serving', patient, patient.arrival_time, queue, hosp))
                 patient.fetch_strategy = 'Closest Dist ' + str(i + 1)
                 return
         best_hosp = self.min_by_expected_travel_and_queue_time(patient)
         patient.fetch_strategy = 'Best expected time'
         patient.set_hosp_num(best_hosp.hosp_num)
         queue = best_hosp.add_patient(patient)
-        self.events.add(Event('served', patient, patient.serve_finish_time, queue, best_hosp))
+        if queue.load[-1] <= queue.servers:
+            self.events.add(Event('start_serving', patient, patient.arrival_time, queue, best_hosp))
 
     def model_queue(self):
         while self.events:
@@ -54,9 +55,16 @@ class Hospitals2DModel:
             if event.type == 'appear':
                 self.distribute_patient(event.patient)
             elif event.type == 'served':
-                event.queue.pop(event.patient)
+                new_serving_patient = event.queue.pop()
                 self.served += 1
                 event.hospital.served += 1
+                if new_serving_patient:
+                    self.events.add(Event('start_serving', new_serving_patient, event.time,
+                                             event.queue, event.hospital))
+            elif event.type == 'start_serving':
+                event.patient.set_serve_start_time(event.time)
+                self.events.add(Event('served', event.patient, event.patient.serve_finish_time,
+                                         event.queue, event.hospital))
         return self.appeared, self.served
 
     def show_patients(self, from_index=0, until_index=None):

@@ -4,9 +4,9 @@ from simulation.core.Hospitals2DModel import Hospitals2DModel
 
 def queue_plot(queue, hosp_num, strategy, ax, ylim=None, queue_buffer=5):
     data = {
-        'Time': queue.arrival_times + [0, 2000],
+        'Time': queue.event_times + [0, 2000],
         'Load': queue.load + ([queue_buffer] * 2),
-        'Type': ['Queue load' for _ in range(len(queue.arrival_times))] + (['Queue buffer'] * 2)
+        'Type': ['Queue load' for _ in range(len(queue.event_times))] + (['Queue buffer'] * 2)
     }
     data = pd.DataFrame(data)
     sns.lineplot(x='Time', y='Load', hue='Type', data=data, ax=ax)

@@ -28,7 +28,6 @@ class Hospital2D:
         return self.location.dist(patient.request_location) / self.velocity
 
     def add_patient(self, patient):
-        patient.set_queue_time(self.queue.calc_expected_queue_time(patient.arrival_time))
         self.patients.append(patient)
         self.queue.add_patient(patient)
         self.appeared += 1

@@ -25,6 +25,11 @@ class Patient:
         self.serve_start_time = self.arrival_time + queue_time
         self.serve_finish_time = self.serve_start_time + self.serve_time
 
+    def set_serve_start_time(self, serve_start_time):
+        self.serve_start_time = serve_start_time
+        self.queue_time = self.serve_start_time - self.arrival_time
+        self.serve_finish_time = self.serve_start_time + self.serve_time
+
     def set_queue_state(self, state):
         self.queue_state = state
 
