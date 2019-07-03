@@ -20,8 +20,8 @@ class Queue:
         self.event_times.append(patient.arrival_time)
 
     def pop(self):
-        self.served += 1
         if self.queue:
+            self.served += 1
             patient = self.queue.pop(0)
             self.event_times.append(patient.serve_finish_time)
             self.load.append(self.load[-1] - 1)
@@ -35,7 +35,10 @@ class Queue:
         surgeon_finish_time = [0 for _ in range(self.servers)]
         for patient, i in zip(patients_in_period, range(len(patients_in_period))):
             if i < self.servers:
-                surgeon_finish_time[i] = patient.serve_finish_time
+                if patient.serve_finish_time:
+                    surgeon_finish_time[i] = patient.serve_finish_time
+                else:
+                    surgeon_finish_time[i] = patient.arrival_time + patient.serve_time
             else:
                 idx = surgeon_finish_time.index(min(surgeon_finish_time))
                 surgeon_finish_time[idx] += patient.serve_time

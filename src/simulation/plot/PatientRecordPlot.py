@@ -21,11 +21,11 @@ def record_for_each_patient_global(ax, strategy, mu, l=25, ylim=None, queue_buff
     sns.set_color_codes("pastel")
     ax.set_title('Time record for each patient in system with strategy ' + strategy)
     print(data.tail(10))
+    sns.barplot(x="Patient id", y='Serving time', color='g', label='Serving time', data=data, ax=ax)
+    sns.barplot(x="Patient id", y='Queuing time', color='r', label='Queuing time', data=data, ax=ax)
+    sns.set_color_codes('muted')
     sns.barplot(x="Patient id", y='Transporation time',
                 label="Transporation time", data=data, ax=ax, color='b')
-    sns.barplot(x="Patient id", y='Serving time', color='g', label='Serving time', data=data, ax=ax)
-    sns.set_color_codes('muted')
-    sns.barplot(x="Patient id", y='Queuing time', color='r', label='Queuing time', data=data, ax=ax)
 
     # Add a legend and informative axis label
     ax.legend(ncol=2, loc="upper right", frameon=True)

@@ -17,11 +17,11 @@ def record_for_each_patient(hosp_num, stats, ax, servers, strategy, ylim=None, x
         data['Patient id'].append(id)
     data = pd.DataFrame(data)
     sns.set(style="whitegrid")
-    sns.set_color_codes("pastel")
     ax.set_title('Time record in H%d[server=%d] with strategy %s' % (hosp_num, servers[hosp_num], strategy))
+    sns.barplot(x="Patient id", y='Serving time', color='g', label='Serving time', data=data, ax=ax)
+    sns.set_color_codes("pastel")
     sns.barplot(x="Patient id", y='Transporation time',
                 label="Transporation time", data=data, ax=ax, color='b')
-    sns.barplot(x="Patient id", y='Serving time', color='g', label='Serving time', data=data, ax=ax)
     sns.set_color_codes('muted')
     sns.barplot(x="Patient id", y='Queuing time', color='r', label='Queuing time', data=data, ax=ax)
 
@@ -32,7 +32,7 @@ def record_for_each_patient(hosp_num, stats, ax, servers, strategy, ylim=None, x
 
 
 if __name__ == '__main__':
-    mu = 120
+    mu = 80
     queue_buffer = 5
     ylim = (0, 800)
     xlim = (0, 30)

@@ -43,7 +43,7 @@ class SimulationStats:
     def aggregate_hospital(self, hospital_simulations):
         appeared = np.mean([hospital.appeared for hospital in hospital_simulations])
         served = np.mean([hospital.served for hospital in hospital_simulations])
-        patients = self.aggregate_patients([hospital.patients for hospital in hospital_simulations])
+        patients = self.aggregate_patients([hospital.get_served_patients() for hospital in hospital_simulations])
         return HospitalStats(appeared, served, patients)
 
     def aggregate_hospitals(self, hospitals_simulations):
@@ -57,7 +57,7 @@ class SimulationStats:
         for i in range(self.iterations):
             model = Hospitals2DModel(self.l, self.servers, self.strategies, mu=self.mu, stream=self.stream,
                                      queue_buffer=self.queue_buffer)
-            patients.append(model.patients)
+            patients.append(model.get_served_patients())
             appeared.append(model.appeared)
             served.append(model.served)
             hospitals.append(model.hospitals)

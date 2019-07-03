@@ -6,7 +6,7 @@ import pandas as pd
 class Hospitals2DModel:
     def __init__(self, lambda_inflow, servers_in_hospital, strategies, mu=1, timesteps=2000,
                  hosp_locations=[Point2D(-25, 25), Point2D(0, -43), Point2D(25, 25)],
-                 queue_buffer=10, r=50, velocity=2, stream=None):
+                 queue_buffer=10, r=50, velocity=0.5, stream=None):
         self.hospitals = [Hospital2D(strategies[i], hosp_locations[i], servers_in_hospital[i], i,
                                      queue_buffer, velocity) for i in range(len(hosp_locations))]
         self.stream = Stream(lambda_inflow, mu, timesteps, r) if stream is None else stream
@@ -28,6 +28,9 @@ class Hospitals2DModel:
 
     def min_by_expected_travel_and_queue_time(self, patient):
         return min(self.hospitals, key=lambda hosp: hosp.expected_travel_and_queue_time(patient))
+
+    def get_served_patients(self):
+        return [patient for patient in self.patients if patient.serve_finish_time is not None]
 
     def distribute_patient(self, patient):
         self.patients.append(patient)

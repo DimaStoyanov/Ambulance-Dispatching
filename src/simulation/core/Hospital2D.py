@@ -19,6 +19,9 @@ class Hospital2D:
             return True
         return self.queue.length(time) < self.queue_buffer
 
+    def get_served_patients(self):
+        return [patient for patient in self.patients if patient.queue_time is not None]
+
     def expected_travel_and_queue_time(self, patient):
         patient.set_transp_time(self.calc_transp_time(patient))
         queue_time = self.queue.calc_expected_queue_time(patient.arrival_time)
