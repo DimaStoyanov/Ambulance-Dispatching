@@ -11,6 +11,7 @@ class Patient:
         self.fetch_strategy = None
         self.queue_state = None
         self.hospital_num = None
+        self.events = []
 
     def __repr__(self):
         return 'Patient reqT=%d arrT=%d ssT=%d sfT=%d hosp=%d fetch=%s' % (self.request_time, self.arrival_time,

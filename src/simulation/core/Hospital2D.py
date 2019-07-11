@@ -14,10 +14,10 @@ class Hospital2D:
         self.queue = Queue(servers_number)
         self.patients = []
 
-    def can_accept_patient(self, time):
+    def can_accept_patient(self):
         if self.strategy == 'A':
             return True
-        return self.queue.length(time) < self.queue_buffer
+        return self.queue.length() < self.queue_buffer
 
     def get_served_patients(self):
         return [patient for patient in self.patients if patient.queue_time is not None]

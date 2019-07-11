@@ -6,3 +6,8 @@ class Event:
         self.queue = queue
         self.hospital = hospital
 
+    def __repr__(self):
+        res = '%s at %d' % (self.type, self.time)
+        if self.hospital:
+            res += ' in %d hospital' % (self.hospital.hosp_num + 1)
+        return res
