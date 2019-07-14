@@ -60,7 +60,8 @@ def get_data(hour, days):
             from_c = coords_from[from_name]
             to_name = ' '.join(cols[2:4])
             to_c = [None] * 2 if to_name not in coords_to else coords_to[to_name]
-            ans.append([cols[0], cols[1], str(from_c[0]), str(from_c[1]), cols[2], cols[3], str(to_c[0]), str(to_c[1]), str(duration)])
+            ans.append([cols[0], cols[1], str(from_c[0]), str(from_c[1]), cols[2], cols[3], str(to_c[0]), str(to_c[1]),
+                        str(duration)])
         return ans
 
 
@@ -83,10 +84,14 @@ def get_hours(time_interval):
 
 
 def write_data(day_type, time_interval):
-    with open('../../data/transportation/spb-%s-%s.csv' % (day_type, time_interval), 'w', encoding='utf-8') as f:
-        f.write('Адрес (от),Широта (от),Долгота (от),Адрес (до),Широта (до),Долгота (до),Длительность (сек)\n')
+    with open('../../data/transportation/aggr/spb-%s-%s.csv' % (day_type, time_interval), 'w', encoding='utf-8') as f:
+        f.write(
+            '№,Улица (от),Дом (от),Широта (от),Долгота (от),Улица (до),Дом (до),Широта (до),Долгота (до),Длительность (сек)\n')
+        idx = 0
         for hour in get_hours(time_interval):
             for cols in get_data(hour, get_days_num(day_type)):
+                idx += 1
+                f.write('%d,' % idx)
                 f.write(','.join(cols) + '\n')
 
 
